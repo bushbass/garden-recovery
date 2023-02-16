@@ -11,6 +11,7 @@ const getProducts = async (req, res) => {
 // get a single product
 const getProduct = async (req, res) => {
   const { id } = req.params;
+  console.log(id);
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: 'No such product' });
@@ -92,10 +93,22 @@ const updateProduct = async (req, res) => {
   res.status(200).json(product);
 };
 
+// get a single store's products
+const getStoreProducts = async (req, res) => {
+  const { store } = req.params;
+  console.log(store);
+  const products = await Product.find({ storeNumber: store }).sort({
+    createdAt: -1,
+  });
+
+  res.status(200).json(products);
+};
+
 module.exports = {
   getProducts,
   getProduct,
   createProduct,
   deleteProduct,
   updateProduct,
+  getStoreProducts,
 };
